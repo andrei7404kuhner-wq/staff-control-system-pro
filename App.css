@@ -1,0 +1,384 @@
+/* ============================================================
+   1. БАЗОВЫЕ НАСТРОЙКИ (ФУНДАМЕНТ)
+   ============================================================ */
+:root {
+    --bg-divider: #bbb;
+    --green-active: #2ecc71;
+    --app-width: 98%;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden; /* Запрещаем общий скролл страницы */
+    background-color: #e5e5e5;
+}
+
+/* ============================================================
+   2. ШАПКА (HEADER), КНОПКИ И ПОИСК
+   ============================================================ */
+.controls {
+    width: var(--app-width);
+    margin: 5px auto;
+    display: flex;
+    flex-wrap: wrap; /* Кнопки будут прыгать на новую строку, а не толкать экран */
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 5px;
+    background: #f4f4f4; /* Небольшой фон, чтобы отделить от сетки */
+    border-radius: 8px;
+    z-index: 100;
+}
+
+
+.btn, .btn-red, .save-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    background: #3498db;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.btn-red { background: #e74c3c; }
+.save-btn { background: #27ae60; width: 100%; margin-top: 15px; }
+.btn:hover, .save-btn:hover { transform: translateY(-1px); filter: brightness(1.1); }
+
+.search-bar {
+    width: 350px;
+    padding: 10px 20px;
+    border: 2px solid #3498db;
+    border-radius: 25px;
+    outline: none;
+    font-size: 16px;
+    background: #f9f9f9;
+}
+
+.search-bar:focus {
+    border-color: #f1c40f; /* Желтая рамка при поиске */
+    box-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+    background: #fff;
+}
+
+/* ============================================================
+   3. ГЛАВНЫЙ КОНТЕЙНЕР И КОЛОНКИ (СКРОЛЛИНГ)
+   ============================================================ */
+.zones-container {
+    display: flex;
+    height: calc(100vh - 120px); /* Высота под экран за вычетом шапки */
+    background: var(--bg-divider);
+    gap: 4px;
+    width: var(--app-width);
+    margin: 0 auto;
+    box-shadow: 0 0 30px rgba(0,0,0,0.15);
+}
+
+.side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    overflow: hidden;
+}
+
+.zone-title {
+    color: white;
+    text-align: center;
+    padding: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.left-zone .zone-title { background-color: #27ae60; }
+.right-zone .zone-title { background-color: #7f8c8d; }
+
+.grid {
+    display: flex;
+    flex: 1;
+    gap: 1px;
+    background: #ddd;
+    overflow: hidden;
+}
+
+.grid-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    min-width: 80px;
+}
+
+/* НЕЗАВИСИМЫЙ СКРОЛЛ КАЖДОЙ КОЛОНКИ */
+.grid-column-body {
+    flex: 1;
+    overflow-y: auto !important;
+    scrollbar-width: thin;
+}
+
+.grid-column-body::-webkit-scrollbar { width: 6px; }
+.grid-column-body::-webkit-scrollbar-thumb { background: #3498db; border-radius: 4px; }
+
+.sub-header {
+    position: sticky;
+    top: 0;
+    background: #34495e;
+    color: white;
+    text-align: center;
+    padding: 4px;
+    font-size: 13px;
+    font-weight: bold;
+    z-index: 10;
+    border-bottom: 2px solid #2c3e50;
+}
+
+/* ============================================================
+   4. ЯЧЕЙКИ (ЖИРНЫЕ ЧЕРНЫЕ ЦИФРЫ 900)
+   ============================================================ */
+.cell, .slot-number, .emp-id, .dash {
+    font-size: 16px !important;    /* Одинаковый крупный размер везде */
+    font-weight: 900 !important;   /* Максимальная жирность */
+    color: #000000 !important;     /* Угольно-черный */
+    line-height: 1 !important;
+}
+
+.cell {
+    border-bottom: 1px solid #ecf0f1;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.1s;
+    background-color: #fff;
+}
+
+.cell:hover { background: #f5f5f5; }
+
+.cell-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px; /* Расстояние между местом и номером */
+}
+
+/* Спец-цвета для статусов */
+.cell-green { background-color: #2ecc71 !important; }
+.cell-green .slot-number, .cell-green .emp-id, .cell-green .dash {
+    color: #ffffff !important; /* На зеленом фоне - белые цифры */
+}
+
+.cell-transparent { opacity: 0.35; background: #bdc3c7; }
+.cell-selected, .is-selected {
+    background-color: #f39c12 !important;
+    color: white !important;
+    box-shadow: inset 0 0 0 2px #e67e22;
+}
+
+/* ============================================================
+   5. МОДАЛЬНЫЕ ОКНА И ТЕМНЫЙ ПАРОЛЬ
+   ============================================================ */
+.modal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    z-index: 5000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 85%;
+    max-width: 800px;
+    position: relative;
+}
+
+.dark.auth-box {
+    background: #1a1a2e !important;
+    color: white;
+    border: 1px solid #2ecc71;
+}
+
+#password-input {
+    width: 100%;
+    padding: 15px;
+    background: #0a0a1a;
+    color: #2ecc71;
+    border: 1px solid #2ecc71;
+    font-size: 24px;
+    text-align: center;
+    border-radius: 6px;
+    margin-top: 20px;
+    outline: none;
+}
+
+.numbers-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px;
+    margin-top: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.number-item {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.number-item.filled { background: #e74c3c; color: white; }
+.number-item.empty { background: #ecf0f1; color: #7f8c8d; }
+
+/* ============================================================
+   6. ГИГАНТСКОЕ ДОСЬЕ (TOOLTIP)
+   ============================================================ */
+.tooltip {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: rgba(10, 10, 26, 0.98);
+    color: white;
+    border-radius: 15px;
+    padding: 20px;
+    z-index: 9999;
+    border: 2px solid #2ecc71;
+    text-align: center;
+    min-width: 300px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.tooltip img {
+    max-width: 450px; /* ГИГАНТСКОЕ ФОТО */
+    max-height: 450px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #444;
+}
+
+.tooltip span {
+    font-size: 32px; /* ОГРОМНЫЙ ТЕКСТ ФИО */
+    font-weight: 900;
+    color: #2ecc71;
+    text-transform: uppercase;
+    display: block;
+}
+
+.tooltip-id {
+    font-size: 48px;
+    font-weight: 900;
+    color: white;
+    margin-top: 10px;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 35px;
+    cursor: pointer;
+    color: #aaa;
+}
+.cell-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Расстояние между 1 и №105 */
+    width: 100%;
+}
+
+.slot-number {
+    font-size: 11px;
+    color: #7f8c8d;
+    font-weight: 900;
+}
+
+.emp-id {
+    font-size: 14px;
+    color: #000;
+    font-weight: 900; /* Максимально жирно */
+}
+
+.cell-green .emp-id, .cell-green .slot-number, .cell-green .dash {
+    color: white !important;
+}
+.modal-content {
+    animation: zoomIn 0.2s ease-out;
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+.cell {
+    height: 22px !important; /* Очень тонкие ячейки */
+    min-height: 22px !important;
+}
+.emp-id, .slot-number {
+    font-size: 12px !important; /* Уменьшаем шрифт, чтобы влез в 22px */
+}
+
+.controls {
+    width: 98%;
+    margin: 5px auto;
+    display: flex;
+    flex-wrap: wrap; /* Разрешаем перенос на вторую строку */
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+}
+.search-bar {
+    flex: 1; /* Поиск заберет свободное место */
+    min-width: 200px; /* Но не станет меньше 200px */
+    max-width: 400px; /* И не больше 400px */
+    height: 34px;
+    padding: 0 15px;
+    border: 2px solid #3498db;
+    border-radius: 20px;
+    font-size: 14px;
+    outline: none;
+}
+
+/* Прижимаем кнопки, чтобы они не разлетались */
+.controls button {
+    flex-shrink: 0; /* Кнопки не будут сжиматься, только поиск */
+    white-space: nowrap; /* Текст в кнопках не будет переноситься */
+}
+.main-app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Ровно высота экрана */
+    overflow: hidden;
+}
+
+.zones-container {
+    flex: 1; /* Сетка забирает ВСЁ оставшееся место под шапкой */
+    display: flex;
+    gap: 2px;
+    background: #bbb;
+    overflow: hidden; /* Скроллить будем только внутри колонок */
+}
